@@ -8,6 +8,8 @@ namespace _3DES
 {
     public static class TripleDES
     {
+        private static Random random = new Random();
+
         public static string Encrypt(string keyHex, string strHexToEncrypt)
         {
             var subKeys = SplitKey(keyHex);
@@ -37,6 +39,16 @@ namespace _3DES
             string key3 = keyHex.Substring(32, 16);
 
             return new Tuple<string, string, string>(key1, key2, key3);
+        }
+        
+        public static string GetRandomKeyHex()
+        {
+            string keyHex = "";
+            for (int i = 0; i < 48; i++)
+            {
+                keyHex += random.Next(16).ToString("X");
+            }
+            return keyHex;
         }
     }
 }
