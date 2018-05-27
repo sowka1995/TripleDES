@@ -436,5 +436,15 @@ namespace _3DES
 
             return bits;
         }
+        private static Random random = new Random();
+        public static string GetRandomKeyHex()
+        {           
+            string keyHex = "";
+            for (int i = 0; i < 48; i++)
+            {
+                keyHex += random.Next(16).ToString("X");
+            }
+            return keyHex;
+        }
     }
 }

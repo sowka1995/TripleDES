@@ -10,8 +10,8 @@ namespace _3DES
     {
         public static void Main(string[] args)
         {
-            string inputHex = "123456ABCD132536"; 
-            string keyHex = "A2BB09182736CCDDAABE09182736CA992AABB09182936CCDA";
+            string inputHex = "123456ABCD132536";       
+            string keyHex = DES.GetRandomKeyHex();
 
             string cipher = TripleDES.Encrypt(keyHex, inputHex);
             Console.WriteLine(cipher);
