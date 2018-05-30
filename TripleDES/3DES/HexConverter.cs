@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -86,6 +87,19 @@ namespace _3DES
             }
 
             return hex;
+        }
+
+        public static string BitsToHex(List<int[]> list)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                string binary = BitsToHex(list[i]);
+                builder.Append(binary);
+            }
+
+            return builder.ToString();
         }
     }
 }

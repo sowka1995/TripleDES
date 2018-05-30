@@ -6,7 +6,7 @@ namespace _3DES
     public class DES
     {
         // Initial Permutation table
-        private static byte[] IP = {
+        private static readonly byte[] IP = {
             58, 50, 42, 34, 26, 18, 10, 2,
             60, 52, 44, 36, 28, 20, 12, 4,
             62, 54, 46, 38, 30, 22, 14, 6,
@@ -18,7 +18,7 @@ namespace _3DES
         };
 
         // Permuted Choice 1 table
-        private static byte[] PC1 = {
+        private static readonly byte[] PC1 = {
             57, 49, 41, 33, 25, 17, 9,
             1,  58, 50, 42, 34, 26, 18,
             10, 2,  59, 51, 43, 35, 27,
@@ -30,7 +30,7 @@ namespace _3DES
         };
 
         // Permuted Choice 2 table
-        private static byte[] PC2 = {
+        private static readonly byte[] PC2 = {
             14, 17, 11, 24, 1,  5,
             3,  28, 15, 6,  21, 10,
             23, 19, 12, 4,  26, 8,
@@ -42,12 +42,12 @@ namespace _3DES
         };
 
         // Array to store the number of rotations that are to be done on each round
-        private static byte[] rotations = {
+        private static readonly byte[] rotations = {
             1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1
         };
 
         // Expansion (aka P-box) table
-        private static byte[] E = {
+        private static readonly byte[] E = {
             32, 1,  2,  3,  4,  5,
             4,  5,  6,  7,  8,  9,
             8,  9,  10, 11, 12, 13,
@@ -59,7 +59,7 @@ namespace _3DES
         };
 
         // S-boxes (i.e. Substitution boxes)
-        private static byte[][] S = {
+        private static readonly byte[][] S = {
                new byte[] {
                 14, 4,  13, 1,  2,  15, 11, 8,  3,  10, 6,  12, 5,  9,  0,  7,
                 0,  15, 7,  4,  14, 2,  13, 1,  10, 6,  12, 11, 9,  5,  3,  8,
@@ -104,7 +104,7 @@ namespace _3DES
         };
 
         // Permutation table
-        private static byte[] P = {
+        private static readonly byte[] P = {
             16, 7,  20, 21,
             29, 12, 28, 17,
             1,  15, 23, 26,
@@ -116,7 +116,7 @@ namespace _3DES
         };
 
         // permutation (aka Inverse permutation) table
-        private static byte[] FP = {
+        private static readonly byte[] FP = {
             40, 8, 48, 16, 56, 24, 64, 32,
             39, 7, 47, 15, 55, 23, 63, 31,
             38, 6, 46, 14, 54, 22, 62, 30,
@@ -140,8 +140,6 @@ namespace _3DES
         // programs, then we need to generate the subkeys first in order, store
         // them and then use them in reverse order.
         private static int[][] subkey = new int[16][]; // [16][48]
-
-        public static object Integer { get; private set; }
 
         private static int[] Permute(int[] inputBits, int[] keyBits, bool isDecrypt)
         {
@@ -241,7 +239,6 @@ namespace _3DES
             if (isDecrypt)
             {
                 Console.Write("Decrypted text: ");
-
             }
             else
             {
@@ -401,7 +398,16 @@ namespace _3DES
             Console.WriteLine();
         }
 
-        public static string Encrypt(string keyHex, string strHexToEncrypt)
+        private static int[] GetBitsFromHexStr(string hexStr)
+        {
+            int[] bits = new int[64];
+            string inputBinary = HexConverter.HexToBinary(hexStr);
+            bits = inputBinary.Select(i => int.Parse(i + "")).ToArray();
+
+            return bits;
+        }
+
+        public string Encrypt(string keyHex, string strHexToEncrypt)
         {
             // inputBits will store the 64 bits of the input as a an int array of
             // size 64. This program uses int arrays to store bits, for the sake
@@ -419,6 +425,11 @@ namespace _3DES
             return HexConverter.BitsToHex(cipher);
         }
 
+        public static int[] Encrypt(int[] keyBits, int[] inputBitsToEncrypt)
+        {
+            return Permute(inputBitsToEncrypt, keyBits, false);
+        }
+
         public static string Decrypt(string keyHex, string cipherHex)
         {
             int[] cipherBits = GetBitsFromHexStr(cipherHex);
@@ -428,13 +439,9 @@ namespace _3DES
             return HexConverter.BitsToHex(decryptedBits);
         }
 
-        private static int[] GetBitsFromHexStr(string hexStr)
+        public static int[] Decrypt(int[] keyBits, int[] cipherBitsToDecrypt)
         {
-            int[] bits = new int[64];
-            string inputBinary = HexConverter.HexToBinary(hexStr);
-            bits = inputBinary.Select(i => int.Parse(i + "")).ToArray();
-
-            return bits;
+            return Permute(cipherBitsToDecrypt, keyBits, true);
         }
     }
 }

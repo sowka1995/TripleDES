@@ -10,14 +10,17 @@ namespace _3DES
     {
         public static void Main(string[] args)
         {
-            string inputHex = "123456ABCD132536";       
+            string inputHex = "123456ABCD132531";
+            string inputHex1 = "123456";
+            string inputHex2 = "123456ABCD132536ADDE23";
             string keyHex = TripleDES.GetRandomKeyHex();
-            
-            string cipher = TripleDES.Encrypt(keyHex, inputHex);
+
+            string cipher = TripleDES.Encrypt(keyHex, inputHex2);
             Console.WriteLine(cipher);
 
             string decrypted = TripleDES.Decrypt(keyHex, cipher);
             Console.WriteLine(decrypted);
+           
             Console.WriteLine(keyHex);
             Console.ReadKey();
         }
