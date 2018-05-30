@@ -101,7 +101,6 @@ namespace _3DES
 
             for (int i = 0; i < bitBlocks.Count; i++)
             {
-                DES.Encrypt(subKeys.Item3, bitBlocks[i]);
                 int[] decrypted3 = DES.Decrypt(subKeys.Item3, bitBlocks[i]);
                 int[] decrypted2 = DES.Encrypt(subKeys.Item2, decrypted3);
                 int[] decrypted1 = DES.Decrypt(subKeys.Item1, decrypted2);

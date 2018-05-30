@@ -390,6 +390,21 @@ namespace _3DES
 
         public static int[] Decrypt(int[] keyBits, int[] cipherBitsToDecrypt)
         {
+            // Initialize subkeys for decryption
+            int i;
+            for (i = 0; i < 28; i++)
+            {
+                C[i] = keyBits[PC1[i] - 1];
+            }
+            for (; i < 56; i++)
+            {
+                D[i - 28] = keyBits[PC1[i] - 1];
+            }
+            for (int n = 0; n < 16; n++)
+            {
+                KS(n, keyBits);
+            }
+
             return Permute(cipherBitsToDecrypt, keyBits, true);
         }
     }
